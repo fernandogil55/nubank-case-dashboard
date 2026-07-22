@@ -28,6 +28,36 @@ export default async function handler(req, res) {
     });
   }
 
+  // diagnóstico temporário: testa quais modelos realmente geram (cota ok)
+  if (req.method === "GET" && req.query?.debug === "testar") {
+    const KEY = process.env.GEMINI_API_KEY;
+    const candidatos = [
+      "gemini-2.5-flash", "gemini-flash-latest", "gemini-2.5-flash-lite",
+      "gemini-3.5-flash", "gemini-2.0-flash-lite", "gemini-3.1-flash-lite",
+    ];
+    const out = {};
+    for (const m of candidatos) {
+      try {
+        const r = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${KEY}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ role: "user", parts: [{ text: "diga ok" }] }],
+              generationConfig: { maxOutputTokens: 10 },
+            }),
+          }
+        );
+        const j2 = await r.json();
+        out[m] = r.ok ? "OK" : (j2?.error?.message || "").slice(0, 60);
+      } catch (e) {
+        out[m] = "falha: " + e.message.slice(0, 40);
+      }
+    }
+    return res.status(200).json(out);
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ erro: "Use POST." });
   }
