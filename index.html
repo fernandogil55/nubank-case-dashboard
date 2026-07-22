@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case Nubank — Diagnóstico de Autorização (M1)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Case Product &amp; Operations · Autorização de Cartão</p>
+      <h1>Um merchant, uma causa, uma data</h1>
+      <p class="sub">Diagnóstico da queda de aprovação do <strong>Merchant M1</strong> no Q4/2025.
+      Dados lidos <strong>ao vivo</strong> de um banco Postgres (Supabase).</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="kpis" class="kpis">
+      <div class="kpi skeleton"></div><div class="kpi skeleton"></div>
+      <div class="kpi skeleton"></div><div class="kpi skeleton"></div>
+    </section>
+
+    <section class="card">
+      <h2>M1 — aprovação mês a mês (2025)</h2>
+      <p class="cap">A operação rodava estável em 66–70% até setembro e despencou para ~52% no fim do ano.
+      A linha vermelha (negativas por <em>Card Status</em>) mostra a causa subindo junto.</p>
+      <canvas id="chartM1"></canvas>
+    </section>
+
+    <section class="card">
+      <h2>Aprovação por merchant</h2>
+      <p class="cap">Fora do M1, a operação roda perto de 80%. O problema está concentrado num único merchant —
+      que também é 56% de todo o volume.</p>
+      <canvas id="chartMerch"></canvas>
+    </section>
+
+    <section class="card story">
+      <h2>A leitura em uma frase</h2>
+      <p><strong>M1</strong> concentra o problema · <strong>Card Status</strong> é a causa (credenciais invalidadas em massa) ·
+      a <strong>semana de 29/set</strong> é o evento. Não é retry storm: o que dobrou foi o número de clientes únicos negados.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span id="status">Conectando ao banco…</span>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
