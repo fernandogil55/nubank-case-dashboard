@@ -13,51 +13,10 @@ async function sb(path) {
   return r.json();
 }
 
+// Modelos em ordem de preferência: se o primeiro falhar (cota/indisponível), tenta o próximo.
+const MODELOS = ["gemini-flash-latest", "gemini-3.1-flash-lite"];
+
 export default async function handler(req, res) {
-  // diagnóstico temporário: lista os modelos que a chave consegue acessar
-  if (req.method === "GET" && req.query?.debug === "models") {
-    const KEY = process.env.GEMINI_API_KEY;
-    if (!KEY) return res.status(500).json({ erro: "sem chave" });
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${KEY}`);
-    const j = await r.json();
-    if (!r.ok) return res.status(502).json({ erro: j?.error?.message || r.status });
-    return res.status(200).json({
-      modelos: (j.models || [])
-        .filter((m) => (m.supportedGenerationMethods || []).includes("generateContent"))
-        .map((m) => m.name.replace("models/", "")),
-    });
-  }
-
-  // diagnóstico temporário: testa quais modelos realmente geram (cota ok)
-  if (req.method === "GET" && req.query?.debug === "testar") {
-    const KEY = process.env.GEMINI_API_KEY;
-    const candidatos = [
-      "gemini-2.5-flash", "gemini-flash-latest", "gemini-2.5-flash-lite",
-      "gemini-3.5-flash", "gemini-2.0-flash-lite", "gemini-3.1-flash-lite",
-    ];
-    const out = {};
-    for (const m of candidatos) {
-      try {
-        const r = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${KEY}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ role: "user", parts: [{ text: "diga ok" }] }],
-              generationConfig: { maxOutputTokens: 10 },
-            }),
-          }
-        );
-        const j2 = await r.json();
-        out[m] = r.ok ? "OK" : (j2?.error?.message || "").slice(0, 60);
-      } catch (e) {
-        out[m] = "falha: " + e.message.slice(0, 40);
-      }
-    }
-    return res.status(200).json(out);
-  }
-
   if (req.method !== "POST") {
     return res.status(405).json({ erro: "Use POST." });
   }
@@ -106,25 +65,29 @@ export default async function handler(req, res) {
       "DADOS DO CASE (lidos ao vivo do banco):\n" +
       contexto;
 
-    // 3) chamada ao Gemini
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${KEY}`;
-    const gr = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: sistema }] },
-        contents: [{ role: "user", parts: [{ text: pergunta }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
-      }),
+    // 3) chamada ao Gemini (tenta os modelos em ordem até um responder)
+    const corpo = JSON.stringify({
+      system_instruction: { parts: [{ text: sistema }] },
+      contents: [{ role: "user", parts: [{ text: pergunta }] }],
+      generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
     });
-    const gj = await gr.json();
-    if (!gr.ok) {
-      return res.status(502).json({ erro: "Erro do Gemini: " + (gj?.error?.message || gr.status) });
+
+    let ultimoErro = "";
+    for (const modelo of MODELOS) {
+      const gr = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${KEY}`,
+        { method: "POST", headers: { "Content-Type": "application/json" }, body: corpo }
+      );
+      const gj = await gr.json();
+      if (gr.ok) {
+        const resposta = gj?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+        if (resposta) return res.status(200).json({ resposta, modelo });
+        ultimoErro = "resposta vazia";
+      } else {
+        ultimoErro = gj?.error?.message || String(gr.status);
+      }
     }
-    const resposta =
-      gj?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ||
-      "Não consegui gerar uma resposta.";
-    return res.status(200).json({ resposta });
+    return res.status(502).json({ erro: "Não consegui gerar resposta. (" + ultimoErro + ")" });
   } catch (e) {
     return res.status(500).json({ erro: "Falha no servidor: " + e.message });
   }
