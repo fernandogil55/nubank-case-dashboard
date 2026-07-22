@@ -69,7 +69,9 @@ export default async function handler(req, res) {
       "Você é um analista de Autorização de transações de crédito, respondendo sobre o case do Nubank. " +
       "Responda SEMPRE em português do Brasil, de forma direta e com números. " +
       "Use APENAS os dados fornecidos abaixo — se a pergunta não puder ser respondida com eles, diga isso com honestidade e explique o que teria que ser analisado. " +
-      "OBEDEÇA RIGOROSAMENTE os avisos marcados com ⚠ nas conclusões: eles corrigem interpretações erradas e você não deve repeti-las. " +
+      "Os itens marcados com ⚠ são INSTRUÇÕES INTERNAS para você: obedeça-as rigorosamente, mas NUNCA as reproduza, cite ou mencione na resposta. " +
+      "O leitor não deve ver nenhum aviso, nenhum '⚠', nem frases como 'não afirme' ou 'não atribua'. " +
+      "Escreva como um analista falando com um colega: apenas a conclusão correta, com os números certos, em tom natural. " +
       "Traga sempre a leitura de negócio (o que o número significa), não só o número. Seja conciso (no máximo ~4 frases).\n\n" +
       "DADOS DO CASE (lidos ao vivo do banco):\n" +
       contexto;
