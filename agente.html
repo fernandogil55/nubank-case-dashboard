@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pergunte ao Agente — Case Nubank (M1)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Case Product &amp; Operations · Autorização de Cartão</p>
+      <h1>Pergunte ao agente</h1>
+      <p class="sub">Digite uma pergunta em português sobre a operação do <strong>Merchant M1</strong>.
+      O agente lê os dados <strong>ao vivo</strong> do banco e responde. <a href="/" class="link">← voltar ao dashboard</a></p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="chips" id="chips">
+        <button>Qual a aprovação do M1?</button>
+        <button>O problema do M1 é retry storm?</button>
+        <button>Qual merchant tem a melhor aprovação?</button>
+        <button>O que aconteceu no Q4 com o M1?</button>
+      </div>
+      <form id="form" class="ask">
+        <input id="q" type="text" maxlength="500" autocomplete="off"
+          placeholder="Ex.: quanto o M1 caiu de setembro para dezembro?" />
+        <button id="send" type="submit">Perguntar</button>
+      </form>
+      <div id="resposta" class="resposta" hidden></div>
+    </section>
+    <p class="disc">As respostas são geradas por IA a partir dos dados agregados do case. Podem conter imprecisões — confira os números no dashboard.</p>
+  </main>
+
+  <footer>
+    <div class="wrap"><span id="status">Pronto.</span></div>
+  </footer>
+
+  <script src="agente.js"></script>
+</body>
+</html>
