@@ -14,6 +14,20 @@ async function sb(path) {
 }
 
 export default async function handler(req, res) {
+  // diagnóstico temporário: lista os modelos que a chave consegue acessar
+  if (req.method === "GET" && req.query?.debug === "models") {
+    const KEY = process.env.GEMINI_API_KEY;
+    if (!KEY) return res.status(500).json({ erro: "sem chave" });
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${KEY}`);
+    const j = await r.json();
+    if (!r.ok) return res.status(502).json({ erro: j?.error?.message || r.status });
+    return res.status(200).json({
+      modelos: (j.models || [])
+        .filter((m) => (m.supportedGenerationMethods || []).includes("generateContent"))
+        .map((m) => m.name.replace("models/", "")),
+    });
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ erro: "Use POST." });
   }
