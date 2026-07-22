@@ -69,7 +69,12 @@ export default async function handler(req, res) {
     const corpo = JSON.stringify({
       system_instruction: { parts: [{ text: sistema }] },
       contents: [{ role: "user", parts: [{ text: pergunta }] }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 1200,
+        // modelos novos gastam orçamento "pensando" antes de escrever — desliga isso
+        thinkingConfig: { thinkingBudget: 0 },
+      },
     });
 
     let ultimoErro = "";
