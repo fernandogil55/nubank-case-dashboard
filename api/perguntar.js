@@ -33,10 +33,11 @@ export default async function handler(req, res) {
 
   try {
     // 1) dados ao vivo do banco
-    const [head, m1, merch] = await Promise.all([
+    const [head, m1, merch, findings] = await Promise.all([
       sb("case_headlines?select=*"),
       sb("m1_monthly?select=*&order=mes"),
       sb("merchant_overview?select=*&order=txns.desc"),
+      sb("case_findings?select=*"),
     ]);
 
     // 2) contexto para o modelo
@@ -55,12 +56,20 @@ export default async function handler(req, res) {
         (r) =>
           `- ${r.merchant_id}: ${(r.approval * 100).toFixed(1)}% aprovação, ${r.txns} txns (${(r.volume_share * 100).toFixed(1)}% do volume)`
       ),
+      "",
+      "CONCLUSÕES DO DIAGNÓSTICO (análise já validada — use como fonte principal):",
+      ...findings.map(
+        (f) =>
+          `\n[${f.topico}] ${f.conclusao}\n  Números: ${f.numeros}` +
+          (f.alerta ? `\n  ⚠ IMPORTANTE: ${f.alerta}` : "")
+      ),
     ].join("\n");
 
     const sistema =
       "Você é um analista de Autorização de transações de crédito, respondendo sobre o case do Nubank. " +
       "Responda SEMPRE em português do Brasil, de forma direta e com números. " +
       "Use APENAS os dados fornecidos abaixo — se a pergunta não puder ser respondida com eles, diga isso com honestidade e explique o que teria que ser analisado. " +
+      "OBEDEÇA RIGOROSAMENTE os avisos marcados com ⚠ nas conclusões: eles corrigem interpretações erradas e você não deve repeti-las. " +
       "Traga sempre a leitura de negócio (o que o número significa), não só o número. Seja conciso (no máximo ~4 frases).\n\n" +
       "DADOS DO CASE (lidos ao vivo do banco):\n" +
       contexto;
