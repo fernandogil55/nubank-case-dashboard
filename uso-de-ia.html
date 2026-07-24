@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Uso de IA — Case Nubank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Entregável 3 · Case Product &amp; Operations</p>
+      <h1>Como a IA foi usada neste case</h1>
+      <p class="sub">Ferramentas, sessões e prompts — e, principalmente,
+      <strong>o que a IA propôs que foi rejeitado</strong>.</p>
+      <nav class="nav">
+        <a href="/">Diagnóstico</a>
+        <a href="/email.html">E-mail ao M1</a>
+        <a href="/uso-de-ia.html" aria-current="page">Uso de IA</a>
+        <a href="/agente.html">Agente</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="card">
+      <h2>Resumo</h2>
+      <p class="cap">Os dois parágrafos pedidos pelo enunciado.</p>
+      <p style="margin-bottom:14px">Usei <strong>Claude (Claude Code no desktop e Claude Cowork)</strong> como
+      ambiente principal, com Python/pandas rodando sobre a planilha para toda a análise quantitativa, e
+      Supabase + Vercel para publicar o dashboard e o agente que respondem sobre a base ao vivo. A IA entrou
+      em quatro frentes: <strong>análise</strong> (todos os cortes da base, sempre executados em código —
+      nenhum número foi estimado), <strong>confronto</strong> (rodadas de red team em que pedi explicitamente
+      que ela atacasse as próprias conclusões), <strong>produção</strong> (deck, e-mail, planilha de auditoria)
+      e <strong>infraestrutura</strong> (a skill de análise e o agente da demo). Cada número do material final
+      tem um identificador rastreável até uma base de fatos congelada.</p>
+      <p>A combinação com o meu julgamento aconteceu em três momentos. Primeiro, <strong>matando claims</strong>:
+      quatro conclusões propostas pela IA foram descartadas por não resistirem a um teste — inclusive duas que
+      eram narrativamente mais atraentes que a versão final. Segundo, <strong>decidindo onde o dado é
+      silencioso</strong>: a escolha do trimestre contrafactual, a decisão de expor um problema crônico maior
+      que o evento, e a de perguntar em vez de acusar no e-mail ao parceiro são escolhas minhas, não saídas de
+      análise. Terceiro, <strong>encerrando a iteração</strong>: quando percebi que cada nova rodada produzia
+      achados novos indefinidamente, mudei o método — congelei uma base de fatos verificada e proibi
+      exploração aberta a partir dali. A IA me deu velocidade e cobertura; a régua do que entrou no material
+      foi minha.</p>
+    </section>
+
+    <section class="card">
+      <h2>A análise foi testada até parar de mudar</h2>
+      <p class="cap">Cada rodada de confronto alterou menos conclusões que a anterior: 3 → 1 → 0.
+      Não é instabilidade — é convergência.</p>
+      <div class="tblwrap">
+        <table class="log">
+          <thead><tr><th>#</th><th>Iteração</th><th>O que mudou</th><th>Conclusões alteradas</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td><strong>Análise inicial</strong><br><span class="pill">15–21/07</span></td>
+              <td>Diagnóstico completo: 71,4% geral, M1 como outlier, Card Status como causa, ruptura em 29/set</td>
+              <td>— <span class="small">(linha de base)</span></td></tr>
+            <tr><td>1</td><td><strong>Red team</strong><br><span class="pill">21/07</span></td>
+              <td>Reexecução independente do zero + testes adversariais. MRR corrigido; argumento cross-merchant
+              removido; claim de fraude derrubado</td><td><strong>3</strong></td></tr>
+            <tr><td>2</td><td><strong>Novos cortes</strong><br><span class="pill">22/07</span></td>
+              <td>Segmentação novos vs. renovação. Causa raiz ampliada: de “falta de ABU” para “mudança na
+              submissão + ABU como fator crônico”</td><td><strong>1</strong></td></tr>
+            <tr><td>3</td><td><strong>Verificação final</strong><br><span class="pill">23/07</span></td>
+              <td>23 fatos re-testados numa execução única. Nenhuma conclusão caiu; 3 definições refinadas</td>
+              <td><strong>0</strong> → base congelada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Por que cada achado mudou</h2>
+      <p class="cap">Cada correção veio de um tipo diferente de erro analítico.</p>
+      <ol class="steps">
+        <li><strong>Erro de atribuição.</strong> A primeira versão dava ao evento do Q4 o crédito por 895
+        assinantes perdidos (R$ 36 mil/mês). Mas um trimestre normal já perdia 516 do mesmo jeito — o evento
+        não tornou o cliente menos recuperável, apenas produziu mais clientes negados. Com o Q2 como
+        contrafactual, o custo real é <strong>~R$ 15 mil/mês incremental</strong>.
+        <br><span class="small">Princípio: variação no tempo não é causa. Sem contrafactual, não há atribuição.</span></li>
+
+        <li><strong>Evidência vazia.</strong> “Nenhum dos clientes perdidos aparece em outro merchant, logo o
+        cartão morreu” parecia prova forte. Mas o M1 <em>não compartilha nenhum cliente</em> com nenhum outro
+        merchant — o teste daria zero de qualquer forma.
+        <br><span class="small">Princípio: um argumento que não poderia dar outro resultado não é evidência.</span></li>
+
+        <li><strong>Viés de agregação (paradoxo de Simpson).</strong> No agregado, o ticket negado por fraude
+        (R$ 254) superava o aprovado (R$ 187) — sugeria viés contra compra alta. Dentro de cada merchant o gap
+        some; no M2 o negado é até <em>menor</em>. Era mix de merchants, não viés do modelo.
+        <br><span class="small">Princípio: nunca comparar agregados de populações heterogêneas.</span></li>
+
+        <li><strong>Hipótese não falseada.</strong> A tese “falta de Account Updater” explicava as renovações,
+        mas previa que clientes <em>novos</em> estariam imunes. Ao medir esse grupo, a previsão falhou:
+        Card Status subiu de <strong>21,4% para 39,5%</strong> nos novos, quase igual às renovações.
+        <br><span class="small">Princípio: uma hipótese só vale depois de sobreviver a uma previsão que poderia tê-la matado.</span></li>
+
+        <li><strong>Imprecisão de definição.</strong> As três últimas mudanças não eram de substância: baseline
+        de comparação, qual ticket médio, qual janela de retry. Escrita a definição exata, os números pararam
+        de mudar — e foram congelados.
+        <br><span class="small">Princípio: número sem definição explícita muda sozinho a cada leitura.</span></li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>Onde o julgamento humano decidiu</h2>
+      <p class="cap">A IA deu velocidade e cobertura. Estas decisões foram minhas.</p>
+
+      <div class="ro">
+        <h3>Claims que eu matei</h3>
+        <ul>
+          <li>“R$ 36 mil/mês é o custo do evento” — sem contrafactual, superestima em ~2,4×</li>
+          <li>“O modelo de fraude penaliza ticket alto” — some ao estratificar por merchant</li>
+          <li>“Os clientes perdidos sumiram da base, logo o cartão morreu” — vazio por construção</li>
+          <li>“A causa é falta de ABU” — não explica os clientes novos serem atingidos igualmente</li>
+        </ul>
+        <p style="margin-top:8px"><strong>Dois deles eram narrativamente mais atraentes que a versão final</strong>
+        — R$ 36k impressiona mais que R$ 15k, e “modelo enviesado” é manchete melhor que “fraude saudável”.
+        Foram descartados mesmo assim.</p>
+      </div>
+
+      <div class="ro">
+        <h3>Decisões onde o dado é silencioso</h3>
+        <ul>
+          <li><strong>Escolher o Q2 como contrafactual</strong> — trimestre completo, sem o efeito de entrada da
+          base de janeiro e sem contaminação do evento. Nenhum dado indica essa escolha; ela é metodológica.</li>
+          <li><strong>Mostrar o problema crônico junto com o agudo</strong>, mesmo expondo que a perda estrutural
+          é maior que a do evento.</li>
+          <li><strong>Perguntar em vez de acusar</strong> no e-mail — hipótese não é prova, e acusar um parceiro
+          custa a colaboração de que precisamos.</li>
+          <li><strong>Priorizar o plano por tempo-até-impacto</strong>, não por tamanho do problema.</li>
+          <li><strong>Assumir a falha de monitoramento do próprio Nubank</strong> — era mais confortável omitir.</li>
+        </ul>
+      </div>
+
+      <div class="ro">
+        <h3>Verificação independente</h3>
+        <p>Os números que sustentam a narrativa foram recalculados por fórmula (COUNTIFS/SUMIFS) sobre uma
+        cópia intocada da base, fora do ambiente de IA — planilha <code>auditoria_numeros_deck.xlsx</code>.
+        Conferir aritmética é verificação, não julgamento: é rodapé de credibilidade, não o argumento central.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Registro de sessões</h2>
+      <p class="cap">Histórico cronológico de ferramentas, objetivos e prompts-chave.</p>
+      <div class="tblwrap">
+        <table class="log">
+          <thead><tr><th>#</th><th>Data</th><th>Plataforma / ferramentas</th><th>Objetivo</th><th>Prompt-chave</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><span class="pill">15–21/07</span></td><td>Claude Code · pandas, Supabase, GitHub</td>
+              <td>Análise exploratória da base</td><td>—</td>
+              <td>Diagnóstico inicial; skill <strong>analista-transacoes</strong></td></tr>
+            <tr><td>2</td><td><span class="pill">22/07</span></td><td>Claude Cowork · device bridge</td>
+              <td>Criar o AI usage log compartilhado</td><td>“Consigo conectar meu Claude Code com esse projeto?”</td>
+              <td><strong>AI_USAGE_LOG.md</strong></td></tr>
+            <tr><td>3</td><td><span class="pill">21–22/07</span></td><td>Claude Cowork · sandbox Python</td>
+              <td>Red team da análise</td>
+              <td>“questionasse, confrontasse você mesmo suas próprias análises… vamos iterar antes de partir pro passo dois”</td>
+              <td><strong>3 correções</strong> + 7 achados novos</td></tr>
+            <tr><td>4</td><td><span class="pill">22/07</span></td><td>Claude Code · skill de análise</td>
+              <td>Iteração 2: exaurir cortes não explorados</td>
+              <td>“exaure… confronte tudo que você trouxe até agora… me traga o que ainda não tinha sido identificado”</td>
+              <td><strong>Novos vs. renovações</strong> — reformula a causa raiz</td></tr>
+            <tr><td>5</td><td><span class="pill">23/07</span></td><td>Claude Code · pandas</td>
+              <td>Encerrar a fase de análise</td>
+              <td>“a cada iteração você encontra algo novo… existe algum método pra otimizar até a gente se sentir confiante?”</td>
+              <td><strong>FATOS_FINAIS.md</strong> — 23 fatos congelados</td></tr>
+            <tr><td>6–7</td><td><span class="pill">23/07</span></td><td>Claude Code · pandas, openpyxl</td>
+              <td>Slides de método, planilha de auditoria e estrutura do deck</td>
+              <td>“preciso deles mais bem explicados pra eu conseguir entender e explicar”</td>
+              <td>Auditoria em Excel + <strong>ESTRUTURA_DECK.md</strong></td></tr>
+            <tr><td>8</td><td><span class="pill">23/07</span></td><td>Claude Code · pptxgenjs</td>
+              <td>Montar o deck</td><td>“slides 14–15 viram anexo do documento de uso de IA”</td>
+              <td>Deck de 19 slides. QA achou <strong>2 erros numéricos</strong> → base subiu para v1.1</td></tr>
+            <tr><td>9</td><td><span class="pill">23/07</span></td><td>Claude Code</td>
+              <td>Estruturar e redigir o e-mail ao M1</td><td>“siga pra próxima seção do email”</td>
+              <td><strong>EMAIL_M1.md</strong> — 4 decisões estratégicas + redação</td></tr>
+            <tr><td>10</td><td><span class="pill">23/07</span></td><td>Claude Code · API Supabase</td>
+              <td>Comparar dashboard × deck</td><td>“vê o que tem a mais, se tem alguma coisa a ver entre eles”</td>
+              <td><strong>Achado crítico:</strong> o agente da demo ainda tinha a causa raiz antiga</td></tr>
+            <tr><td>11</td><td><span class="pill">23/07</span></td><td>Claude Code · psycopg2, docx</td>
+              <td>Sincronizar o site e encurtar o e-mail</td><td>“o email ficou muito longo… como que eu consigo editar ele?”</td>
+              <td>Agente corrigido (11 conclusões) + e-mail em .docx</td></tr>
+            <tr><td>12</td><td><span class="pill">23/07</span></td><td>Claude Code · Vercel</td>
+              <td>Publicar e-mail, navegação e esta página</td><td>“pode seguir com todas as prioridades… deixa a redação editável”</td>
+              <td>Este site</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card story">
+      <h2>Nota metodológica</h2>
+      <p>Onde a IA gerou uma hipótese ou um número, ele só entrou no material final depois de validado
+      contra os dados. O exemplo central é o MRR: a estimativa inicial de <strong>R$ 29–36 mil/mês</strong>
+      virou <strong>~R$ 15 mil/mês incremental</strong> após a análise contrafactual — a coorte do Q4 incluía
+      churn crônico que aconteceria de qualquer forma. É o processo “IA propõe → red team confronta → número
+      muda antes do material final” em uma linha.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><span id="status">Entregável 3 · atualizado em 23/07/2026</span></div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-mail ao Merchant M1 — Case Nubank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Entregável 2 · Case Product &amp; Operations</p>
+      <h1>E-mail ao Merchant M1</h1>
+      <p class="sub">Resposta à preocupação do parceiro com a queda de aprovação.
+      O texto abaixo é <strong>editável</strong> — clique e escreva.</p>
+      <nav class="nav">
+        <a href="/">Diagnóstico</a>
+        <a href="/email.html" aria-current="page">E-mail ao M1</a>
+        <a href="/uso-de-ia.html">Uso de IA</a>
+        <a href="/agente.html">Agente</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="toolbar">
+        <button class="btn" id="copy">Copiar texto</button>
+        <button class="btn ghost" id="download">Baixar .txt</button>
+        <button class="btn ghost" id="reset">Restaurar original</button>
+        <span class="saved" id="saved">—</span>
+      </div>
+
+      <div class="mailhead">
+        <div><span class="k">Para:</span> [Merchant M1 — contato comercial / pagamentos]</div>
+        <div><span class="k">De:</span> Fernando Gil — Authorization Team, Nubank</div>
+        <div><span class="k">Assunto:</span> <strong>M1 approval rates — what we found, and one question for your team</strong></div>
+      </div>
+
+      <div class="editable" id="mail" contenteditable="true" spellcheck="false"></div>
+
+      <p class="hint">✏️ As suas edições ficam salvas automaticamente neste navegador, neste computador.
+      Elas <strong>não</strong> alteram o arquivo <code>.docx</code> do entregável — quando terminar de ajustar,
+      use “Copiar texto” e cole no documento final.</p>
+    </section>
+
+    <section class="card">
+      <h2>Decisões estratégicas por trás deste e-mail</h2>
+      <p class="cap">O que definiu o tom e o conteúdo — e o que foi deliberadamente deixado de fora.</p>
+
+      <div class="ro">
+        <h3>1. Validar a percepção dele na primeira linha</h3>
+        <p>O M1 procurou o Nubank porque notou a queda. A pior abertura possível seria defensiva
+        (“estamos analisando”). Confirmar que ele está certo muda a conversa de disputa para
+        investigação conjunta.</p>
+      </div>
+      <div class="ro">
+        <h3>2. Perguntar, não acusar <em>— a decisão mais importante</em></h3>
+        <p>A evidência aponta para uma mudança no stack de pagamentos do M1, mas <strong>hipótese não é
+        prova</strong>. Acusar um parceiro com base em hipótese destrói a colaboração de que precisamos para
+        confirmar a causa. O e-mail leva o dado, explica a lógica e faz uma pergunta específica.
+        <strong>Se a hipótese estiver errada, o e-mail continua correto.</strong></p>
+      </div>
+      <div class="ro">
+        <h3>3. Assumir a nossa própria falha, por escrito</h3>
+        <p>O merchant percebeu antes de nós. Omitir seria confortável; incluir compra credibilidade
+        para todo o resto do pedido.</p>
+      </div>
+      <div class="ro">
+        <h3>4. Mostrar o que foi descartado, não só o que foi encontrado</h3>
+        <p>Listar as hipóteses eliminadas prova que houve investigação de verdade e antecipa as
+        objeções que o time dele levantaria.</p>
+      </div>
+
+      <h2 style="margin-top:26px">O que ficou deliberadamente de fora</h2>
+      <div class="ro">
+        <ul>
+          <li><strong>Dados de outros merchants</strong> — confidencialidade. O grupo de controle entra
+          como agregado anônimo (“o restante da nossa carteira”), nunca nomeado.</li>
+          <li><strong>“895 assinantes perdidos”</strong> — é o número <em>não</em> ajustado pelo
+          contrafactual. Repetir para o parceiro o número que nós mesmos corrigimos seria incoerente.
+          Uso o <strong>−22% de receita processada</strong>, que é o P&amp;L dele e é limpo.</li>
+          <li><strong>Culpa explícita</strong> — ver decisão 2.</li>
+          <li><strong>Jargão interno do Nubank</strong> — o destinatário é o time de pagamentos do M1.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Estrutura em 7 blocos</h2>
+      <p class="cap">O esqueleto do texto e a função de cada parte.</p>
+      <div class="tblwrap">
+        <table class="log">
+          <thead><tr><th>#</th><th>Bloco</th><th>Função</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Abertura</strong></td><td>Confirmar que a percepção dele está correta</td></tr>
+            <tr><td>2</td><td><strong>O que os dados mostram</strong></td><td>Magnitude, data e motivo — em números</td></tr>
+            <tr><td>3</td><td><strong>Impacto comercial</strong></td><td>Traduzir para a receita dele (−22% de run rate)</td></tr>
+            <tr><td>4</td><td><strong>O que foi descartado</strong></td><td>Provar profundidade e antecipar objeções</td></tr>
+            <tr><td>5</td><td><strong>O achado que gera a pergunta</strong></td><td>Clientes novos também atingidos → a lógica da causa</td></tr>
+            <tr><td>6</td><td><strong>O pedido</strong></td><td>Pergunta específica, com checklist do que verificar</td></tr>
+            <tr><td>7</td><td><strong>Nossos compromissos + próximo passo</strong></td><td>O que fazemos do nosso lado e uma call marcada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><span id="status">Entregável 2 · versão de ~390 palavras · números de FATOS_FINAIS.md v1.1</span></div>
+  </footer>
+
+  <script src="email.js"></script>
+</body>
+</html>
