@@ -33,11 +33,12 @@ export default async function handler(req, res) {
 
   try {
     // 1) dados ao vivo do banco
-    const [head, m1, merch, findings] = await Promise.all([
+    const [head, m1, merch, findings, seg] = await Promise.all([
       sb("case_headlines?select=*"),
       sb("m1_monthly?select=*&order=mes"),
       sb("merchant_overview?select=*&order=txns.desc"),
       sb("case_findings?select=*"),
+      sb("merchant_segment?select=*&order=txns.desc"),
     ]);
 
     // 2) contexto para o modelo
@@ -55,6 +56,13 @@ export default async function handler(req, res) {
       ...merch.map(
         (r) =>
           `- ${r.merchant_id}: ${(r.approval * 100).toFixed(1)}% aprovação, ${r.txns} txns (${(r.volume_share * 100).toFixed(1)}% do volume)`
+      ),
+      "",
+      "APROVAÇÃO POR MERCHANT × TIPO DE TRANSAÇÃO × USO DO CARTÃO (para cruzamentos específicos):",
+      ...seg.map(
+        (r) =>
+          `- ${r.merchant_id} / ${r.transaction_type} / ${r.card_use}: ${(r.approval * 100).toFixed(1)}% aprovação, ${r.txns} txns, ticket médio R$${(+r.avg_ticket).toFixed(2)}` +
+          ` | negativas: Card Status ${(r.card_status_pct * 100).toFixed(1)}%, Limite ${(r.limit_pct * 100).toFixed(1)}%, Fraude ${(r.fraud_pct * 100).toFixed(1)}% (das tentativas)`
       ),
       "",
       "CONCLUSÕES DO DIAGNÓSTICO (análise já validada — use como fonte principal):",
