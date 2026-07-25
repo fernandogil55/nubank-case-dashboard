@@ -3,44 +3,30 @@
 
 const ORIGINAL = `<p>Hi [Name],</p>
 
-<p>Thank you for raising this. Your read is correct, and I want to share what we found and where we need your help.</p>
+<p>Thank you for raising this — your read is correct, and here is what we found.</p>
 
-<h3>What the data shows</h3>
+<h3>What happened</h3>
 
-<p>Approval was stable between 66% and 70% from January through September. It then fell to 58.5% in October, 52.8% in November and 52.2% in December. On a weekly view the change is abrupt rather than gradual — 68.1% in the week ending 28 September, 53.9% the following week.</p>
+<p>M1's approval rate held between 66% and 70% all year, then dropped sharply from the week of 29 September, closing December at 52%. The entire drop comes from one decline reason — <strong>Card Status</strong>, an invalid card credential — which rose from 24% to 41% of your attempts, while fraud and limit declines stayed flat. For you, that is roughly a <strong>22% drop in processed revenue</strong>.</p>
 
-<p>The entire movement comes from a single decline reason: <strong>Card Status</strong>, meaning the card credential reaching us is not valid for the transaction. It went from 24.2% of your attempts in September to 41.0% in December, while declines for insufficient limit and for fraud risk stayed flat. On your side, processed revenue fell from roughly R$ 37.0k per month to R$ 28.7k in December — a 22% reduction in run rate.</p>
+<h3>What we found</h3>
 
-<h3>What points to the cause</h3>
-
-<p>We split your traffic into renewals and first-ever charges for customers new to your service. Both were hit with the same intensity: Card Status declines rose from 21.4% to 39.5% for new customers, and from 24.7% to 37.2% for renewals.</p>
-
-<p>This is the detail that matters. A customer entering a freshly issued card for the first time cannot be affected by an ageing stored credential — which points away from a card-on-file problem and toward something in how the transactions are being submitted to us. We also ruled out a retry pattern, a Nubank-wide event, price mix and an outage.</p>
+<p>We ruled out a retry pattern, a Nubank-wide event, seasonality and an outage. The key clue: <strong>brand-new customers — entering a card for the first time — were hit just as hard as renewals</strong>. A freshly entered card cannot be an outdated stored credential, so the cause points to something in how M1's transactions are being submitted to us since late September.</p>
 
 <h3>What we would like to ask</h3>
 
-<p>Could your team check whether anything changed around <strong>29 September</strong>? Specifically:</p>
+<p>Could your team check whether anything changed around <strong>29 September</strong>?</p>
 
 <ul>
 <li>a change of gateway, acquirer or payment service provider, or a new routing rule;</li>
-<li>a version upgrade or configuration change in the payment integration;</li>
-<li>changes to the fields sent in the authorization message — token or PAN format, expiry date, CVV presence, or the stored-credential and MIT/CIT indicators;</li>
-<li>a migration of stored credentials between systems or providers.</li>
+<li>a version or configuration change in the payment integration;</li>
+<li>changes to the authorization message fields — token or PAN format, expiry date, CVV, or stored-credential indicators;</li>
+<li>a migration of stored credentials.</li>
 </ul>
 
-<p>Any one of these could produce exactly this signature.</p>
+<h3>Next steps</h3>
 
-<h3>What we are doing on our side</h3>
-
-<p>We are reviewing the authorization logs for your traffic before and after 29 September, and implementing per-merchant approval-rate alerting. This ran for three months and you noticed it before we did — that part is on us, and I would rather say so plainly.</p>
-
-<p>Separately, two structural improvements worth discussing: network tokenization with automatic credential updating, which prevents stored cards from silently ageing out; and a retry strategy by decline reason. Today only 22% of Card Status declines are retried within seven days, and 10% recover — there is recoverable revenue there for both of us.</p>
-
-<h3>Proposed next step</h3>
-
-<p>A 45-minute call this week with your payments engineering team and ours, working through the checklist above together. Once we close the root cause, I would also like to propose a joint recovery campaign for the subscribers whose charges stopped succeeding during the quarter.</p>
-
-<p>I will send an invitation for Thursday unless another day works better.</p>
+<p>On our side, we are reviewing your authorization logs around 29 September and adding per-merchant approval alerting — this ran for three months before it surfaced, and that part is on us. Could we take 45 minutes this week with both payments teams to work through the checklist together? I will send an invitation for Thursday unless another day is better.</p>
 
 <p>Best regards,<br>
 <strong>Fernando Gil</strong><br>
