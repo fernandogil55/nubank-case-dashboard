@@ -7,7 +7,7 @@ const ORIGINAL = `<p>Hi [Name],</p>
 
 <h3>What happened</h3>
 
-<p>M1's approval rate held between 66% and 70% all year, then dropped sharply from the week of 29 September, closing December at 52%. The entire drop comes from one decline reason — <strong>Card Status</strong>, an invalid card credential — which rose from 24% to 41% of your attempts, while fraud and limit declines stayed flat. For you, that is roughly a <strong>22% drop in processed revenue</strong>.</p>
+<p>Between September and December, M1's approval rate dropped sharply — from around 68% to 52% — driven entirely by declines for <strong>Card Status</strong> (an invalid card credential). For you, that is roughly a <strong>22% drop in processed revenue</strong>.</p>
 
 <h3>What we found</h3>
 
