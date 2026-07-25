@@ -3,34 +3,30 @@
 
 const ORIGINAL = `<p>Hi [Name],</p>
 
-<p>Thank you for raising this — your read is correct, and here is what we found.</p>
+<p>Thank you for raising this. Your read is correct and here is what we found.</p>
 
-<h3>What happened</h3>
+<p>Between September and December, M1's approval rate dropped sharply — from around 68% to 52% — driven entirely by declines for Card Status (an invalid card credential).</p>
 
-<p>Between September and December, M1's approval rate dropped sharply — from around 68% to 52% — driven entirely by declines for <strong>Card Status</strong> (an invalid card credential). For you, that is roughly a <strong>22% drop in processed revenue</strong>.</p>
+<p>The key clue: <strong>brand-new customers — entering a card for the first time — were hit just as hard as renewals</strong>. A freshly entered card cannot be an outdated stored credential, so the cause points to something in how M1's transactions are being submitted to us since late September.</p>
 
-<h3>What we found</h3>
-
-<p>We ruled out a retry pattern, a Nubank-wide event, seasonality and an outage. The key clue: <strong>brand-new customers — entering a card for the first time — were hit just as hard as renewals</strong>. A freshly entered card cannot be an outdated stored credential, so the cause points to something in how M1's transactions are being submitted to us since late September.</p>
-
-<h3>What we would like to ask</h3>
-
-<p>Could your team check whether anything changed around <strong>29 September</strong>?</p>
+<p>I'd like to ask if your team could check whether anything changed around <strong>29th of September 2025</strong>. For example:</p>
 
 <ul>
 <li>a change of gateway, acquirer or payment service provider, or a new routing rule;</li>
 <li>a version or configuration change in the payment integration;</li>
-<li>changes to the authorization message fields — token or PAN format, expiry date, CVV, or stored-credential indicators;</li>
+<li>changes to the authorization message fields — token, expiry date, CVV, or stored-credential indicators;</li>
 <li>a migration of stored credentials.</li>
 </ul>
 
-<h3>Next steps</h3>
+<p>Regarding <strong>next steps</strong>, on our side, we are reviewing your authorization logs around 29 September and adding per-merchant approval alerting — this ran for three months before it surfaced, and that part is on us.</p>
 
-<p>On our side, we are reviewing your authorization logs around 29 September and adding per-merchant approval alerting — this ran for three months before it surfaced, and that part is on us. Could we take 45 minutes this week with both payments teams to work through the checklist together? I will send an invitation for Thursday unless another day is better.</p>
+<p>Could we take 45 minutes with both payments teams to work through the checklist together?</p>
+
+<p>I just sent a calendar invitation for this Thursday at 09am; let me know if another day/time works better for you.</p>
 
 <p>Best regards,<br>
 <strong>Fernando Gil</strong><br>
-Authorization Team · Merchant Business Support<br>
+Authorization Team<br>
 Nubank</p>`;
 
 const KEY = "email_m1_draft_v1";
@@ -66,7 +62,7 @@ function plain() {
 }
 
 document.getElementById("copy").onclick = async () => {
-  const subject = "M1 approval rates — what we found, and one question for your team";
+  const subject = "M1 approval rates — what we found and how can we move forward";
   await navigator.clipboard.writeText("Subject: " + subject + "\n\n" + plain());
   flag("✓ Copiado para a área de transferência", true);
 };
