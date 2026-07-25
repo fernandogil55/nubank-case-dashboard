@@ -12,6 +12,67 @@ document.getElementById("chips").addEventListener("click", (e) => {
   }
 });
 
+// ===== entrada por voz (reconhecimento nativo do navegador) =====
+const mic = document.getElementById("mic");
+const micHint = document.getElementById("micHint");
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SR) {
+  // só mostra o microfone se o navegador souber reconhecer voz
+  mic.hidden = false;
+  micHint.hidden = false;
+
+  const rec = new SR();
+  rec.lang = "pt-BR";
+  rec.interimResults = true;
+  rec.continuous = false;
+  let ouvindo = false;
+  let finalTxt = "";
+
+  const parar = () => { mic.classList.remove("rec"); ouvindo = false; };
+
+  mic.addEventListener("click", () => {
+    if (ouvindo) { rec.stop(); return; }
+    finalTxt = "";
+    input.value = "";
+    try { rec.start(); } catch (_) { /* start duplo, ignora */ }
+  });
+
+  rec.onstart = () => {
+    ouvindo = true;
+    mic.classList.add("rec");
+    status.textContent = "Ouvindo… fale a pergunta.";
+  };
+
+  rec.onresult = (ev) => {
+    let interim = "";
+    for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      const txt = ev.results[i][0].transcript;
+      if (ev.results[i].isFinal) finalTxt += txt;
+      else interim += txt;
+    }
+    input.value = (finalTxt + interim).trim();
+  };
+
+  rec.onerror = (ev) => {
+    parar();
+    status.textContent = ev.error === "not-allowed"
+      ? "Permita o acesso ao microfone para usar a voz."
+      : "Não consegui ouvir. Tente de novo ou digite.";
+  };
+
+  rec.onend = () => {
+    parar();
+    const pergunta = input.value.trim();
+    if (pergunta) {
+      // envia sozinho, como se você tivesse apertado "Perguntar"
+      form.requestSubmit();
+    } else {
+      status.textContent = "Pronto.";
+    }
+  };
+}
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const pergunta = input.value.trim();

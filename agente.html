@@ -34,8 +34,10 @@
       <form id="form" class="ask">
         <input id="q" type="text" maxlength="500" autocomplete="off"
           placeholder="Ex.: quanto o M1 caiu de setembro para dezembro?" />
+        <button id="mic" type="button" class="mic" hidden aria-label="Falar a pergunta" title="Falar a pergunta">🎤</button>
         <button id="send" type="submit">Perguntar</button>
       </form>
+      <p class="mic-hint" id="micHint" hidden>Toque no 🎤 e fale a pergunta — ela é transcrita e enviada sozinha.</p>
       <div id="resposta" class="resposta" hidden></div>
     </section>
     <p class="disc">As respostas são geradas por IA a partir dos dados agregados do case. Podem conter imprecisões — confira os números no dashboard.</p>

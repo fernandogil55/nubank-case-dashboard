@@ -144,3 +144,17 @@ table.log tr:hover td { background: #1f1f2b; }
 .steps > li { margin-bottom: 16px; font-size: 14px; }
 .steps > li strong { color: var(--nu-light); }
 .small { font-size: 13px; color: var(--muted); }
+
+/* ===== botão de microfone (voz no agente) ===== */
+.ask .mic {
+  background: #0f0f14; border: 1px solid var(--line); color: var(--text);
+  border-radius: 12px; padding: 0 16px; font-size: 20px; cursor: pointer;
+  line-height: 1; flex: 0 0 auto;
+}
+.ask .mic:hover { border-color: var(--nu-light); }
+.ask .mic.rec {
+  border-color: var(--danger); background: rgba(239,68,68,.15);
+  animation: micpulse 1s infinite;
+}
+@keyframes micpulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(239,68,68,.5); } 50%{ box-shadow: 0 0 0 8px rgba(239,68,68,0); } }
+.mic-hint { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
