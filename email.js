@@ -20,7 +20,7 @@ const ORIGINAL = `<p>Hi [Name],</p>
 
 <p>Regarding <strong>next steps</strong>, on our side, we are reviewing your authorization logs around 29 September and adding per-merchant approval alerting — this ran for three months before it surfaced, and that part is on us.</p>
 
-<p>Could we take 45 minutes with both payments teams to work through the checklist together?</p>
+<p>Could we please take 45 minutes with both payment teams to work through the checklist together?</p>
 
 <p>I just sent a calendar invitation for this Thursday at 09am; let me know if another day/time works better for you.</p>
 
@@ -62,7 +62,7 @@ function plain() {
 }
 
 document.getElementById("copy").onclick = async () => {
-  const subject = "M1 approval rates — what we found and how can we move forward";
+  const subject = "M1 approval rates — what we found and how we move forward";
   await navigator.clipboard.writeText("Subject: " + subject + "\n\n" + plain());
   flag("✓ Copiado para a área de transferência", true);
 };
