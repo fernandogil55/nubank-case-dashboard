@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visitas — Case Nubank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">Painel privado · visitas do site</p>
+      <h1>Quem abriu o site</h1>
+      <p class="sub">Registro anônimo de cada visita — página, horário, origem e a etiqueta
+      <code>?v=</code> quando o link foi marcado. Sem cookies, sem IP.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="kpis" class="kpis">
+      <div class="kpi skeleton"></div><div class="kpi skeleton"></div>
+      <div class="kpi skeleton"></div><div class="kpi skeleton"></div>
+    </section>
+
+    <section class="card">
+      <h2>Por etiqueta (links marcados <code>?v=</code>)</h2>
+      <p class="cap">Se você mandar links diferentes por pessoa (ex.: <code>?v=maria</code>), cada um aparece aqui.</p>
+      <div class="tblwrap"><table class="log" id="tblTags"><tbody></tbody></table></div>
+    </section>
+
+    <section class="card">
+      <h2>Por página</h2>
+      <div class="tblwrap"><table class="log" id="tblPages"><tbody></tbody></table></div>
+    </section>
+
+    <section class="card">
+      <h2>Últimas 50 visitas</h2>
+      <div class="tblwrap"><table class="log" id="tblRecent">
+        <thead><tr><th>Quando</th><th>Página</th><th>Etiqueta</th><th>Veio de</th></tr></thead>
+        <tbody></tbody></table></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><span id="status">Lendo…</span></div>
+  </footer>
+
+  <script type="module" src="stats.js"></script>
+</body>
+</html>
